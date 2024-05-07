@@ -1,0 +1,39 @@
+.product-detail {
+    display: flex;
+    justify-content: center;
+}
+
+.product-container {
+    display: flex;
+    width: 80%;
+    /* Adjust width as needed */
+}
+
+.product-images {
+    flex: 5;
+    /* Take up 5 parts */
+}
+
+.product-info {
+    flex: 5;
+    /* Take up 5 parts */
+}
+
+/* Additional styling as needed */
+.product-info {
+    padding: 0 20px;
+    /* Add padding to the product info */
+}
+
+.product-images img {
+    width: 100%;
+
+    height: auto;
+    /* Additional styling for the images */
+}
+
+.product-images .img-container {
+    border: 1px solid rgb(93, 93, 93);
+    padding: 5px;
+    border-radius: 10px;
+}

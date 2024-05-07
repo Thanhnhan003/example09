@@ -1,23 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
+import "./assets/sass/app.scss";
+// import "./assets/js/script.js"
+// import './assets/js/script.js'
+
+import Header from './Layouts/Header';
+import Home from './Layouts/Home';
+import Footer from './Layouts/Footer';
+import { Outlet } from 'react-router-dom';
+import Overlay from './Layouts/Overlay';
+import Main from './Layouts/Main';
+import Notification from './Layouts/Notification';
+import Modal from './Layouts/Modal';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Modal />
+      <Overlay />
+      <Notification />
+      <Header />
+      <Main />
+      <Footer />
     </div>
   );
 }
