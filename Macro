@@ -1,0 +1,35 @@
+EnablePrimaryMouseButtonEvents(true)
+
+-- Cấu hình delay giữa các lần kéo
+local delay = 15
+local toggleKey = 5   -- nút dùng để thay đổi trạng thái macro
+
+-- Mảng giá trị recoil
+local recoilValues = {5, 6, 25}
+local currentState = 0  -- 0 = tắt, 1 = recoil 7, 2 = recoil 9, 3 = recoil 11
+local macroEnabled = false
+local currentRecoil = 0
+
+function OnEvent(event, arg)
+    -- Xử lý toggle chuyển đổi recoil
+    if (event == "MOUSE_BUTTON_PRESSED" and arg == toggleKey) then
+        currentState = currentState + 1
+        if currentState > #recoilValues then
+            currentState = 0
+            macroEnabled = false
+            OutputLogMessage("Macro: OFF\n")
+        else
+            macroEnabled = true
+            currentRecoil = recoilValues[currentState]
+            OutputLogMessage(string.format("Macro: ON (Recoil = %d)\n", currentRecoil))
+        end
+    end
+
+    -- Kéo chuột khi macro đang bật và giữ chuột trái
+    if (event == "MOUSE_BUTTON_PRESSED" and arg == 1 and macroEnabled) then
+        while IsMouseButtonPressed(1) do
+            MoveMouseRelative(0, currentRecoil)
+            Sleep(delay)
+        end
+    end
+end
