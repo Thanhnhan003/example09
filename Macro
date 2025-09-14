@@ -1,34 +1,42 @@
 EnablePrimaryMouseButtonEvents(true)
 
--- Cấu hình delay giữa các lần kéo
-local delay = 15
-local toggleKey = 5   -- nút dùng để thay đổi trạng thái macro
+-- Cấu hình delay (ms) giữa các lần kéo
+local delay = 10  -- nhỏ để kéo mượt (10ms)
 
--- Mảng giá trị recoil
-local recoilValues = {5, 6, 25}
-local currentState = 0  -- 0 = tắt, 1 = recoil 7, 2 = recoil 9, 3 = recoil 11
-local macroEnabled = false
-local currentRecoil = 0
+-- Các giai đoạn recoil (thời gian, giá trị)
+-- time tính bằng giây
+local recoilPhases = {
+  {time = 0.3, value = 12},  -- 0-0.3s
+    {time = 0.3, value = 13},  -- 0.3-0.6s
+    {time = 0.3, value = 13},  -- 0.6-0.9s
+    {time = 0.3, value = 13},  -- 0.9-1.2s
+    {time = 0.3, value = 14},  -- 1.2-1.5s
+    {time = 0.5, value = 15},  -- 1.5-2.0s
+    {time = 1.0, value = 16},  -- 2.0-3.0s
+    {time = 999, value = 17},  -- 3.0s trở đi giữ đều
+
+    -- Bạn có thể thêm nhiều giai đoạn khác ở đây
+}
 
 function OnEvent(event, arg)
-    -- Xử lý toggle chuyển đổi recoil
-    if (event == "MOUSE_BUTTON_PRESSED" and arg == toggleKey) then
-        currentState = currentState + 1
-        if currentState > #recoilValues then
-            currentState = 0
-            macroEnabled = false
-            OutputLogMessage("Macro: OFF\n")
-        else
-            macroEnabled = true
-            currentRecoil = recoilValues[currentState]
-            OutputLogMessage(string.format("Macro: ON (Recoil = %d)\n", currentRecoil))
-        end
-    end
+    if (event == "MOUSE_BUTTON_PRESSED" and arg == 1) then
+        local startTime = GetRunningTime()
+        local elapsed = 0
+        local phaseIndex = 1
+        local phase = recoilPhases[phaseIndex]
+        local phaseStart = 0
 
-    -- Kéo chuột khi macro đang bật và giữ chuột trái
-    if (event == "MOUSE_BUTTON_PRESSED" and arg == 1 and macroEnabled) then
         while IsMouseButtonPressed(1) do
-            MoveMouseRelative(0, currentRecoil)
+            elapsed = (GetRunningTime() - startTime) / 1000  -- giây đã trôi qua
+
+            -- kiểm tra có cần chuyển sang phase tiếp theo không
+            if elapsed >= phaseStart + phase.time and phaseIndex < #recoilPhases then
+                phaseStart = phaseStart + phase.time
+                phaseIndex = phaseIndex + 1
+                phase = recoilPhases[phaseIndex]
+            end
+
+            MoveMouseRelative(0, phase.value)
             Sleep(delay)
         end
     end
