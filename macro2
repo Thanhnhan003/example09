@@ -1,0 +1,121 @@
+EnablePrimaryMouseButtonEvents(true)
+
+local delay = 10  
+local recoilPhases3 = { 
+  {time = 0.1, value = 9},
+  {time = 0.2, value = 9},
+  {time = 0.3, value = 10},
+  {time = 0.3, value = 11},
+  {time = 0.3, value = 12},
+  {time = 0.5, value = 12},
+  {time = 1.0, value = 12},
+  {time = 999, value = 12}
+  --1928X1080
+}
+local recoilPhases2 = { 
+  {time = 0.5, value = 15},
+  {time = 0.5, value = 18},
+  {time = 0.5, value = 25},
+  {time = 0.5, value = 25},
+  {time = 0.5, value = 24},
+  {time = 0.5, value = 23},
+  {time = 1.0, value = 22},
+  {time = 999, value = 22}
+  --1728X1080
+}
+
+local recoilPhases1 = { 
+    -- 1-5: Nhẹ
+    {time = 0.09, value = 15},  
+    {time = 0.09, value = 15},
+    {time = 0.09, value = 16},  
+    {time = 0.09, value = 17},
+    {time = 0.09, value = 18},
+
+    -- 6-10: Tăng nhẹ
+    {time = 0.09, value = 19},  
+    {time = 0.09, value = 19},
+    {time = 0.09, value = 19},  
+    {time = 0.09, value = 19},
+    {time = 0.09, value = 19},
+
+    -- 11-20: Trung bình
+    {time = 0.09, value = 19},  
+    {time = 0.09, value = 19},
+    {time = 0.09, value = 20},  
+    {time = 0.09, value = 21},
+    {time = 0.09, value = 22},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 24},
+    {time = 0.09, value = 24},  
+    {time = 0.09, value = 24},
+
+    -- 21-30: Mạnh hơn
+    {time = 0.09, value = 22},  
+    {time = 0.09, value = 22},
+    {time = 0.09, value = 22},  
+    {time = 0.09, value = 22},
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 23},
+
+    -- 31-40: Giật cuối
+    {time = 0.09, value = 24},  
+    {time = 0.09, value = 24},
+    {time = 0.09, value = 24},  
+    {time = 0.09, value = 24},
+    {time = 0.09, value = 25},
+    {time = 0.09, value = 25},  
+    {time = 0.09, value = 25},
+    {time = 0.09, value = 25},
+    {time = 0.09, value = 25},  
+    {time = 999, value = 25} -- kết thúc
+}
+
+local currentState = 0
+local currentPhases = nil
+
+function OnEvent(event, arg)
+    -- đổi chế độ recoil
+    if (event == "MOUSE_BUTTON_PRESSED" and arg == 6) then
+        currentState = (currentState + 1) % 4
+        if currentState == 0 then
+            currentPhases = nil
+            OutputLogMessage("Recoil OFF\n")
+        elseif currentState == 1 then
+            currentPhases = recoilPhases1
+            OutputLogMessage("Đã chọn recoilPhases1\n")
+        elseif currentState == 2 then
+            currentPhases = recoilPhases2
+            OutputLogMessage("Đã chọn recoilPhases2\n")
+        elseif currentState == 3 then
+            currentPhases = recoilPhases3
+            OutputLogMessage("Đã chọn recoilPhases3\n")
+        end
+    end
+
+    -- khi giữ chuột trái
+    if (event == "MOUSE_BUTTON_PRESSED" and arg == 1 and currentPhases ~= nil) then
+        local startTime = GetRunningTime()
+        local elapsed = 0
+        local phaseIndex = 1
+        local phase = currentPhases[phaseIndex]
+        local phaseStart = 0
+
+        -- vừa giữ chuột trái bắn, vừa kéo
+        while IsMouseButtonPressed(1) do
+            elapsed = (GetRunningTime() - startTime) / 1000
+            if elapsed >= phaseStart + phase.time and phaseIndex < #currentPhases then
+                phaseStart = phaseStart + phase.time
+                phaseIndex = phaseIndex + 1
+                phase = currentPhases[phaseIndex]
+            end
+            MoveMouseRelative(0, phase.value)
+            Sleep(delay)
+        end
+    end
+end
