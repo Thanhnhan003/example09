@@ -2,26 +2,27 @@ EnablePrimaryMouseButtonEvents(true)
 
 local delay = 10  
 local recoilPhases3 = { 
-  {time = 0.1, value = 9},
-  {time = 0.2, value = 9},
-  {time = 0.3, value = 10},
-  {time = 0.3, value = 11},
-  {time = 0.3, value = 12},
-  {time = 0.5, value = 12},
-  {time = 1.0, value = 12},
-  {time = 999, value = 12}
-  --1928X1080
+  {time = 0.2, value = 12},
+  {time = 0.2, value = 14},
+  {time = 0.3, value = 15},
+  {time = 0.3, value = 17},
+  {time = 0.3, value = 18},
+  {time = 0.5, value = 19},
+  {time = 1.0, value = 19},
+  {time = 999, value = 19}
+  --1728X1080 aug
 }
 local recoilPhases2 = { 
-  {time = 0.5, value = 15},
-  {time = 0.5, value = 18},
-  {time = 0.5, value = 25},
-  {time = 0.5, value = 25},
-  {time = 0.5, value = 24},
-  {time = 0.5, value = 23},
-  {time = 1.0, value = 22},
-  {time = 999, value = 22}
-  --1728X1080
+  {time = 0.2, value = 12},
+  {time = 0.2, value = 13},
+  {time = 0.2, value = 13},
+  {time = 0.2, value = 13},
+  {time = 0.2, value = 13},
+  {time = 0.2, value = 13},
+  {time = 0.5, value = 14},
+  {time = 0.5, value = 14},
+  {time = 999, value = 14}
+  --1728X1080 ace32
 }
 
 local recoilPhases1 = { 
