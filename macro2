@@ -13,21 +13,21 @@ local recoilPhases3 = {
   --1728X1080 aug
 }
 local recoilPhases2 = { 
-  {time = 0.2, value = 12},
-  {time = 0.2, value = 13},
-  {time = 0.2, value = 13},
-  {time = 0.2, value = 13},
-  {time = 0.2, value = 13},
-  {time = 0.2, value = 13},
-  {time = 0.5, value = 14},
-  {time = 0.5, value = 14},
-  {time = 999, value = 14}
+  {time = 0.2, value = 14},
+  {time = 0.2, value = 14},
+  {time = 0.2, value = 15},
+  {time = 0.2, value = 16},
+  {time = 0.2, value = 17},
+  {time = 0.2, value = 18},
+  {time = 0.5, value = 20},
+  {time = 0.5, value = 20},
+  {time = 999, value = 19}
   --1728X1080 ace32
 }
 
 local recoilPhases1 = { 
     -- 1-5: Nhẹ
-    {time = 0.09, value = 15},  
+    {time = 0.09, value = 17},  
     {time = 0.09, value = 15},
     {time = 0.09, value = 16},  
     {time = 0.09, value = 17},
@@ -53,16 +53,16 @@ local recoilPhases1 = {
     {time = 0.09, value = 24},
 
     -- 21-30: Mạnh hơn
-    {time = 0.09, value = 22},  
-    {time = 0.09, value = 22},
-    {time = 0.09, value = 22},  
-    {time = 0.09, value = 22},
+    {time = 0.09, value = 23},  
     {time = 0.09, value = 23},
     {time = 0.09, value = 23},  
     {time = 0.09, value = 23},
     {time = 0.09, value = 23},
     {time = 0.09, value = 23},  
     {time = 0.09, value = 23},
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 24},
 
     -- 31-40: Giật cuối
     {time = 0.09, value = 24},  
