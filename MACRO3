@@ -1,0 +1,120 @@
+EnablePrimaryMouseButtonEvents(true)
+
+local delay = 10  
+local recoilPhases3 = { 
+  {time = 0.2, value = 9},
+  {time = 0.2, value = 9},
+  {time = 0.2, value = 10},
+  {time = 0.2, value = 11},
+  {time = 0.2, value = 12},
+  {time = 0.2, value = 13},
+  {time = 0.5, value = 13},
+  {time = 0.5, value = 14},
+  {time = 999, value = 13}
+  --1728X1080 aug
+}
+local recoilPhases2 = { 
+  {time = 0.2, value = 14},
+  {time = 0.2, value = 14},
+  {time = 0.2, value = 15},
+  {time = 0.2, value = 16},
+  {time = 0.2, value = 17},
+  {time = 0.2, value = 18},
+  {time = 0.5, value = 20},
+  {time = 0.5, value = 20},
+  {time = 999, value = 19}
+  --1728X1080 ace32
+}
+
+local recoilPhases1 = { 
+    {time = 0.09, value = 17},  
+    {time = 0.09, value = 15},
+    {time = 0.09, value = 16},  
+    {time = 0.09, value = 17},
+    {time = 0.09, value = 18},
+    {time = 0.09, value = 19},  
+    {time = 0.09, value = 19},
+    {time = 0.09, value = 19},  
+    {time = 0.09, value = 19},
+    {time = 0.09, value = 19},
+    {time = 0.09, value = 19},  
+    {time = 0.09, value = 19},
+    {time = 0.09, value = 20},  
+    {time = 0.09, value = 21},
+    {time = 0.09, value = 22},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 24},
+    {time = 0.09, value = 24},  
+    {time = 0.09, value = 24},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},
+    {time = 0.09, value = 23},  
+    {time = 0.09, value = 24},
+    {time = 0.09, value = 24},  
+    {time = 0.09, value = 24},
+    {time = 0.09, value = 24},  
+    {time = 0.09, value = 25},
+    {time = 0.09, value = 25},  
+    {time = 0.09, value = 25},
+    {time = 0.09, value = 25},
+    {time = 0.09, value = 25},  
+    {time = 999, value = 25}
+}
+
+local currentState = 0
+local currentPhases = nil
+local rightPressed = false  -- biến theo dõi chuột phải
+
+function OnEvent(event, arg)
+    -- theo dõi trạng thái chuột phải
+    if event == "MOUSE_BUTTON_PRESSED" and arg == 2 then
+        rightPressed = true
+    elseif event == "MOUSE_BUTTON_RELEASED" and arg == 2 then
+        rightPressed = false
+    end
+
+    -- đổi chế độ recoil
+    if (event == "MOUSE_BUTTON_PRESSED" and arg == 6) then
+        currentState = (currentState + 1) % 4
+        if currentState == 0 then
+            currentPhases = nil
+            OutputLogMessage("Recoil OFF\n")
+        elseif currentState == 1 then
+            currentPhases = recoilPhases1
+            OutputLogMessage("Đã chọn recoilPhases1\n")
+        elseif currentState == 2 then
+            currentPhases = recoilPhases2
+            OutputLogMessage("Đã chọn recoilPhases2\n")
+        elseif currentState == 3 then
+            currentPhases = recoilPhases3
+            OutputLogMessage("Đã chọn recoilPhases3\n")
+        end
+    end
+
+    -- chỉ hoạt động khi giữ chuột phải + bắn
+    if (event == "MOUSE_BUTTON_PRESSED" and arg == 1 and currentPhases ~= nil and rightPressed) then
+        local startTime = GetRunningTime()
+        local elapsed = 0
+        local phaseIndex = 1
+        local phase = currentPhases[phaseIndex]
+        local phaseStart = 0
+
+        while IsMouseButtonPressed(1) and rightPressed do
+            elapsed = (GetRunningTime() - startTime) / 1000
+            if elapsed >= phaseStart + phase.time and phaseIndex < #currentPhases then
+                phaseStart = phaseStart + phase.time
+                phaseIndex = phaseIndex + 1
+                phase = currentPhases[phaseIndex]
+            end
+            MoveMouseRelative(0, phase.value)
+            Sleep(delay)
+        end
+    end
+end
